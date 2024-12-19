@@ -1,0 +1,10 @@
+api = http://localhost:8585/
+app = http://localhost:8080/
+appname = webbase
+
+mongodb.uri = mongodb://127.0.0.1:27017
+dbname = webbase
+
+jwt.secret=<your jwt secret>
+
+global-logging=false
