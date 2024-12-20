@@ -278,7 +278,7 @@ public class AccountResource extends SecuredResource implements ServletContextLi
         NewCookie sessionCookie = new NewCookie("token",        // Cookie name
                 jwt,            // Cookie value
                 "/",            // Path
-                url, // Domain (set explicitly)
+                domain, // Domain (set explicitly)
                 null,           // Comment
                 NewCookie.DEFAULT_MAX_AGE, // Max age (use default or custom)
                 true,          // Secure flag (set true if using HTTPS)
