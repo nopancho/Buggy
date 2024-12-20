@@ -251,6 +251,7 @@ public class AccountResource extends SecuredResource implements ServletContextLi
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(@FormParam("email") String email, @FormParam("password") String password) {
 
+        LOGGER.info("received login request ");
         User user = UserDao.getInstance().readOne(Filters.eq(User.EMAIL, email));
         if (user == null) {
             return error(HttpStatus.SC_UNAUTHORIZED, "E-mail or password are not correct", null);
@@ -277,6 +278,7 @@ public class AccountResource extends SecuredResource implements ServletContextLi
         NewCookie sessionCookie = new NewCookie("token", jwt, "/", null, null, -1, false);
         String url = ConfigManager.getConfig().getString("app.url");
         URI redirectUri = UriBuilder.fromUri(url).build();
+        LOGGER.info("redirecting to "+url);
         return Response.seeOther(redirectUri).cookie(sessionCookie).build();
     }
 
