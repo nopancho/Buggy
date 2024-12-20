@@ -1,15 +1,16 @@
 package org.nopancho.accounting.api;
 
 import com.mongodb.client.model.Filters;
-import org.nopancho.accounting.model.*;
+import org.apache.http.HttpStatus;
+import org.bson.Document;
+import org.nopancho.accounting.model.User;
+import org.nopancho.accounting.model.UserDto;
+import org.nopancho.accounting.model.UserInvitation;
 import org.nopancho.accounting.persistence.UserDao;
 import org.nopancho.accounting.persistence.UserInvitationDao;
 import org.nopancho.accounting.utils.KeyGenerator;
 import org.nopancho.api.ApplicationException;
 import org.nopancho.api.SecuredResource;
-import org.apache.http.HttpStatus;
-import org.bson.Document;
-import org.bson.types.ObjectId;
 import org.nopancho.config.ConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,12 +72,12 @@ public class AccountResource extends SecuredResource implements ServletContextLi
         //save the user
         UserDao.getInstance().insertOrUpdateOne(user);
 
-//        new Thread() {
-//            @Override
-//            public void run() {
-//                Mailer.sendConfirmationEmail(email, confirmationCode, user.getId().toString(), ConfigManager.getConfig().getString("app"), ConfigManager.getConfig().getString("appname"), user.getFirstName() + " " + user.getLastName(), ConfigManager.getConfig().getString("company"));
-//            }
-//        }.start();
+        //        new Thread() {
+        //            @Override
+        //            public void run() {
+        //                Mailer.sendConfirmationEmail(email, confirmationCode, user.getId().toString(), ConfigManager.getConfig().getString("app"), ConfigManager.getConfig().getString("appname"), user.getFirstName() + " " + user.getLastName(), ConfigManager.getConfig().getString("company"));
+        //            }
+        //        }.start();
 
         Document serialize = new UserDto().serialize(user);
         return success("Registration successful", serialize);
@@ -200,12 +201,12 @@ public class AccountResource extends SecuredResource implements ServletContextLi
 
         UserDao.getInstance().insertOrUpdateOne(user);
         user.restrictInformation();
-//        new Thread() {
-//            @Override
-//            public void run() {
-//                Mailer.sendForgotPasswordEmail(emailAdress, forgotPasswordKey, user.getId().toString(), ConfigManager.getConfig().getString("app"), ConfigManager.getConfig().getString("appname"), user.getFirstName() + " " + user.getLastName(), ConfigManager.getConfig().getString("company"));
-//            }
-//        }.start();
+        //        new Thread() {
+        //            @Override
+        //            public void run() {
+        //                Mailer.sendForgotPasswordEmail(emailAdress, forgotPasswordKey, user.getId().toString(), ConfigManager.getConfig().getString("app"), ConfigManager.getConfig().getString("appname"), user.getFirstName() + " " + user.getLastName(), ConfigManager.getConfig().getString("company"));
+        //            }
+        //        }.start();
 
         return getSuccessJson(user.serialize());
     }
@@ -237,8 +238,6 @@ public class AccountResource extends SecuredResource implements ServletContextLi
         UserDao.getInstance().insertOrUpdateOne(user);
         return getSuccessJson("password successfully resetted");
     }
-
-
 
     /**
      * login via email and password. Called when the user has no token
@@ -275,8 +274,8 @@ public class AccountResource extends SecuredResource implements ServletContextLi
         response.put(User.USER, user.serialize());
         String login_successful = getSuccessJson("login successful", response);
         String url = ConfigManager.getConfig().getString("app.url");
-        NewCookie sessionCookie = new NewCookie(
-                "token",        // Cookie name
+        String domain = ConfigManager.getConfig().getString("app.domain");
+        NewCookie sessionCookie = new NewCookie("token",        // Cookie name
                 jwt,            // Cookie value
                 "/",            // Path
                 url, // Domain (set explicitly)
@@ -286,12 +285,10 @@ public class AccountResource extends SecuredResource implements ServletContextLi
                 true            // HttpOnly flag (for security)
         );
 
-
         URI redirectUri = UriBuilder.fromUri(url).build();
-        LOGGER.info("redirecting to "+url);
+        LOGGER.info("redirecting to " + url);
         return Response.seeOther(redirectUri).cookie(sessionCookie).build();
     }
-
 
     /**
      * login via token. The token is always refreshed so that encoded roles are up to date in the token
