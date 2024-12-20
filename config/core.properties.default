@@ -1,10 +1,12 @@
-api = http://localhost:8585/
-app = http://localhost:8080/
-appname = webbase
+# the appname can be used for example in email templates
+appname = Buggy
+# define the landing page after successful login
+app.url = buggy.nopancho.com
 
+# setup mongo connection
 mongodb.uri = mongodb://127.0.0.1:27017
-dbname = webbase
+dbname = buggy
 
-jwt.secret=<your jwt secret>
+jwt.secret=<your secret>
 
 global-logging=false

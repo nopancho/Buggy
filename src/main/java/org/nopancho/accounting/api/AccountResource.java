@@ -10,6 +10,7 @@ import org.nopancho.api.SecuredResource;
 import org.apache.http.HttpStatus;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.nopancho.config.ConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -274,40 +275,11 @@ public class AccountResource extends SecuredResource implements ServletContextLi
         String login_successful = getSuccessJson("login successful", response);
 
         NewCookie sessionCookie = new NewCookie("token", jwt, "/", null, null, -1, false);
-        URI redirectUri = UriBuilder.fromUri("http://localhost:4000").build();
+        String url = ConfigManager.getConfig().getString("app.url");
+        URI redirectUri = UriBuilder.fromUri(url).build();
         return Response.seeOther(redirectUri).cookie(sessionCookie).build();
     }
 
-    /**
-     * login via token. The token is always refreshed so that encoded roles are up to date in the token
-     *
-     * @return
-     */
-//    @Path("/login")
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public String loginWithToken(@QueryParam("token") String token) {
-//        User userFromRequest = getUserByToken(token);
-//        if(userFromRequest == null) {
-//            throw UNAUTHORIZED_EXCEPTION;
-//        }
-//        User user = UserDao.getInstance().readOne(userFromRequest.getId());
-//        if (user == null) {
-//            throw UNAUTHORIZED_EXCEPTION;
-//        }
-//        if (userFromRequest.getEmail().equals(user.getEmail()) && userFromRequest.getPassword().equals(user.getPassword())) {
-//            // create a new token to be sure that all assigned rights are up to date
-//            String jwt = createJWT(user);
-//            user.setToken(jwt);
-//            Document response = new Document();
-//            response.put(User.TOKEN, jwt);
-//            user.restrictInformation();
-//            response.put(User.USER, user.serialize());
-//            return getSuccessJson("login successful", response);
-//        }
-//        ApplicationException loginException = new ApplicationException(HttpStatus.SC_UNAUTHORIZED, "E-mail or password are not correct");
-//        throw loginException;
-//    }
 
     /**
      * login via token. The token is always refreshed so that encoded roles are up to date in the token
