@@ -1,12 +1,11 @@
 package org.nopancho.api;
 
 import io.jsonwebtoken.*;
+import org.apache.http.HttpStatus;
 import org.bson.Document;
 import org.nopancho.accounting.model.Rights;
 import org.nopancho.accounting.model.User;
 import org.nopancho.accounting.persistence.UserDao;
-import org.apache.http.HttpStatus;
-import org.bson.types.ObjectId;
 import org.nopancho.config.ConfigManager;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -16,7 +15,6 @@ import javax.ws.rs.core.Response;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 public class SecuredResource extends Resource {
@@ -33,18 +31,17 @@ public class SecuredResource extends Resource {
         ORGANISATION, PROJECT, CHANNEL, SUPER
     }
 
-
     private boolean compareRights(Rights required, Rights actual) {
-        if(required == Rights.NONE) {
+        if (required == Rights.NONE) {
             return true;
         }
-        if(required == Rights.READ) {
+        if (required == Rights.READ) {
             return (actual == Rights.READ || actual == Rights.WRITE || actual == Rights.ADMIN);
         }
-        if(required == Rights.WRITE) {
+        if (required == Rights.WRITE) {
             return (actual == Rights.WRITE || actual == Rights.ADMIN);
         }
-        if(required == Rights.ADMIN) {
+        if (required == Rights.ADMIN) {
             return actual == Rights.ADMIN;
         }
         return false;
@@ -52,11 +49,11 @@ public class SecuredResource extends Resource {
 
     private boolean authenticate(boolean asSuperUser) {
         User userFromRequest = getUserFromRequest();
-        if(!asSuperUser) {
+        if (!asSuperUser) {
             return true;
         }
         Boolean superUser = userFromRequest.getSuperUser();
-        if(!superUser) {
+        if (!superUser) {
             throw this.UNAUTHORIZED_EXCEPTION;
         }
         return true;
@@ -67,41 +64,41 @@ public class SecuredResource extends Resource {
         return getUserByToken(token);
     }
 
-//    public User getUserByToken(String token) {
-//        if(token == null) {
-//            throw this.UNAUTHORIZED_EXCEPTION;
-//        }
-//        if (token != null) {
-//            token = token.replace("Bearer ", "");
-//            try {
-//                try {
-//                    Claims claims = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(API_SECRET))
-//                            .parseClaimsJws(token).getBody();
-//                    // Additional validation
-//                } catch (ExpiredJwtException e) {
-//                    throw new ApplicationException(HttpStatus.SC_UNAUTHORIZED, "Token has expired");
-//                } catch (SignatureException e) {
-//                    throw new ApplicationException(HttpStatus.SC_UNAUTHORIZED, "Invalid token signature");
-//                } catch (MalformedJwtException e) {
-//                    throw new ApplicationException(HttpStatus.SC_UNAUTHORIZED, "Malformed token");
-//                }
-//                Claims claims = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(API_SECRET))
-//                        .parseClaimsJws(token).getBody();
-//                Object o = claims.get(User.ID);
-//                if (o == null) {
-//                    throw this.UNAUTHORIZED_EXCEPTION;
-//                }
-//                Integer userId = (Integer) o;
-//                User user = UserDao.getInstance().readOne(userId);
-//                return user;
-//            } catch (Exception e) {
-//                System.out.println(token);
-//                e.printStackTrace();
-//                throw this.UNAUTHORIZED_EXCEPTION;
-//            }
-//        }
-//        throw this.UNAUTHORIZED_EXCEPTION;
-//    }
+    //    public User getUserByToken(String token) {
+    //        if(token == null) {
+    //            throw this.UNAUTHORIZED_EXCEPTION;
+    //        }
+    //        if (token != null) {
+    //            token = token.replace("Bearer ", "");
+    //            try {
+    //                try {
+    //                    Claims claims = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(API_SECRET))
+    //                            .parseClaimsJws(token).getBody();
+    //                    // Additional validation
+    //                } catch (ExpiredJwtException e) {
+    //                    throw new ApplicationException(HttpStatus.SC_UNAUTHORIZED, "Token has expired");
+    //                } catch (SignatureException e) {
+    //                    throw new ApplicationException(HttpStatus.SC_UNAUTHORIZED, "Invalid token signature");
+    //                } catch (MalformedJwtException e) {
+    //                    throw new ApplicationException(HttpStatus.SC_UNAUTHORIZED, "Malformed token");
+    //                }
+    //                Claims claims = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(API_SECRET))
+    //                        .parseClaimsJws(token).getBody();
+    //                Object o = claims.get(User.ID);
+    //                if (o == null) {
+    //                    throw this.UNAUTHORIZED_EXCEPTION;
+    //                }
+    //                Integer userId = (Integer) o;
+    //                User user = UserDao.getInstance().readOne(userId);
+    //                return user;
+    //            } catch (Exception e) {
+    //                System.out.println(token);
+    //                e.printStackTrace();
+    //                throw this.UNAUTHORIZED_EXCEPTION;
+    //            }
+    //        }
+    //        throw this.UNAUTHORIZED_EXCEPTION;
+    //    }
 
     public User getUserByToken(String token) {
         if (token == null) {
@@ -113,16 +110,14 @@ public class SecuredResource extends Resource {
 
         try {
             // Parse and validate the token
-            Claims claims = Jwts.parser()
-                    .setSigningKey(DatatypeConverter.parseBase64Binary(API_SECRET)) // Validate signature
-                    .parseClaimsJws(token)
-                    .getBody();
+            Claims claims = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(API_SECRET)) // Validate signature
+                    .parseClaimsJws(token).getBody();
 
             // Validate required claims
             validateClaims(claims);
 
             String subject = claims.getSubject();
-            if(subject == null) {
+            if (subject == null) {
                 throw new ApplicationException(HttpStatus.SC_UNAUTHORIZED, "Invalid token (subject is missing)");
             }
 
@@ -171,7 +166,6 @@ public class SecuredResource extends Resource {
         }
     }
 
-
     public String createToken(User user) {
         // The JWT signature algorithm we will be using to sign the token
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -184,8 +178,7 @@ public class SecuredResource extends Resource {
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
         // Set standard claims
-        JwtBuilder builder = Jwts.builder()
-                .setIssuedAt(now)                         // `iat` claim
+        JwtBuilder builder = Jwts.builder().setIssuedAt(now)                         // `iat` claim
                 .setSubject(user.getId().toString())      // `sub` claim (User ID)
                 .setIssuer("your-application-identifier") // `iss` claim
                 .setAudience("your-audience-identifier")  // `aud` claim
@@ -213,11 +206,15 @@ public class SecuredResource extends Resource {
     }
 
     public static Response success(String message, Document data) {
-        return Response.ok().entity(data.toJson()).build();
+        return Response.ok().entity(safeToJson(data)).build();
     }
 
     // Error response
     public static Response error(int httpStatus, String message, Document data) {
-        return Response.status(httpStatus).entity(data.toJson()).build();
+        return Response.status(httpStatus).entity(safeToJson(data)).build();
+    }
+
+    public static String safeToJson(Document data) {
+        return data != null ? data.toJson() : "{}";
     }
 }
