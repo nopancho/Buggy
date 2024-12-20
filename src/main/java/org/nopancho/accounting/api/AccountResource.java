@@ -292,7 +292,9 @@ public class AccountResource extends SecuredResource implements ServletContextLi
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response loginWithToken() {
+        LOGGER.info("received login with token request");
         User user = getUserFromRequest();
+        LOGGER.info("login with token succeeded");
         return success("login successful", new UserDto().serialize(user));
     }
 }
