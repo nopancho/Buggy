@@ -282,7 +282,7 @@ public class AccountResource extends SecuredResource implements ServletContextLi
                 null,           // Comment
                 NewCookie.DEFAULT_MAX_AGE, // Max age (use default or custom)
                 true,          // Secure flag (set true if using HTTPS)
-                true            // HttpOnly flag (for security)
+                false            // HttpOnly flag (for security)
         );
 
         URI redirectUri = UriBuilder.fromUri(url).build();

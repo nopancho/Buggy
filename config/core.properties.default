@@ -2,7 +2,7 @@
 appname = Buggy
 # define the landing page after successful login
 app.url = https://buggy.nopancho.com
-app.domain = buggy.nopancho.com
+app.domain = nopancho.com
 
 
 # setup mongo connection
