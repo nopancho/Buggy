@@ -1,7 +1,8 @@
 # the appname can be used for example in email templates
 appname = Buggy
 # define the landing page after successful login
-app.url = buggy.nopancho.com
+app.url = https://buggy.nopancho.com
+app.domain = buggy.nopancho.com
 
 
 # setup mongo connection
