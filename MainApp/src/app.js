@@ -54,12 +54,12 @@ document.addEventListener('alpine:init', () => {
                     } else {
                         // Redirect to login page if token validation fails
                         console.warn('Token validation failed, redirecting to login.');
-                        window.location = 'http://localhost:3000/#/login';
+                        window.location = process.env.PP_URL;
                     }
                 } else if (user === undefined) {
                     // Redirect to login if no user is authenticated
                     console.warn('No user authenticated, redirecting to login.');
-                    window.location = 'http://localhost:3000/#/login';
+                    window.location = process.env.PP_URL;
                 } else {
                     console.log("all fine");
                     done(); // Proceed with routing if user is already authenticated
@@ -71,22 +71,11 @@ document.addEventListener('alpine:init', () => {
         },
     });
     router.on({
-        // '/': async () => {
-        //     let menu = await import('./menu');
-        //     Alpine.data('menu', () => menu.default);
-        //     loadContent('content', './welcome');
-        // },
-        '/': async (data) => {
-            let storyList = await import('./story-list/story-list');
-            Alpine.data('storyList', () => storyList.default);
-            loadContent('content', './story-list/story-list');
+        '/': async () => {
+            let menu = await import('./menu');
+            Alpine.data('menu', () => menu.default);
+            loadContent('content', './welcome');
         },
-        '/stories/:storyId/details': async (data) => {
-            let story = await import('./story/story');
-            Alpine.data('story', () => story.default);
-            loadContent('content', './story/story');
-        },
-
     });
     router.resolve();
 });
