@@ -41,11 +41,11 @@ module.exports = {
                     context: path.resolve(__dirname, 'src'), // Base directory for matching
                     to: path.resolve(__dirname, 'dist'), // Output to `dist` while preserving structure
                 },
-                {
-                    from: '**/*.svg', // Match all HTML files
-                    context: path.resolve(__dirname, 'src'), // Base directory for matching
-                    to: path.resolve(__dirname, 'dist'), // Output to `dist` while preserving structure
-                }
+                // {
+                //     from: '**/*.svg', // Match all HTML files
+                //     context: path.resolve(__dirname, 'src'), // Base directory for matching
+                //     to: path.resolve(__dirname, 'dist'), // Output to `dist` while preserving structure
+                // }
             ],
         }),
     ],
