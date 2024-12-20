@@ -15,26 +15,26 @@ window.PP_API_URL = process.env.PP_API_URL;
 document.addEventListener('alpine:init', () => {
     // when alpine is ready add a user object to the store
     // Alpine.store('user', {});
-        router.hooks({
-            after: (params) => {
-                // Store route params and data in the global routeData object
-                Alpine.store('routeData').params = params.params; // Parameters from the route, if any
-                Alpine.store('routeData').data = params.data; // Other data, if any
-                console.log('Route data saved in Alpine store:', Alpine.store('routeData'));
-            },
-            before: async (done, params) => {
-                console.log('Before Hook');
-                try {
-                    // Check if a token exists in cookies
-                    const hasToken = document.cookie.includes('token');
-                    const user = Alpine.store('user');
-                    console.log('User:', user);
-                    console.log('Has Token:', hasToken);
-                    if (hasToken && user === undefined) {
-                        // Extract the token from cookies
-                        const token = document.cookie.split('; ')
-                            .find(row => row.startsWith('token='))
-                            ?.split('=')[1];
+    router.hooks({
+        after: (params) => {
+            // Store route params and data in the global routeData object
+            Alpine.store('routeData').params = params.params; // Parameters from the route, if any
+            Alpine.store('routeData').data = params.data; // Other data, if any
+            console.log('Route data saved in Alpine store:', Alpine.store('routeData'));
+        },
+        before: async (done, params) => {
+            console.log('Before Hook');
+            try {
+                // Check if a token exists in cookies
+                const hasToken = document.cookie.includes('token');
+                const user = Alpine.store('user');
+                console.log('User:', user);
+                console.log('Has Token:', hasToken);
+                if (hasToken && user === undefined) {
+                    // Extract the token from cookies
+                    const token = document.cookie.split('; ')
+                        .find(row => row.startsWith('token='))
+                        ?.split('=')[1];
 
                     // Attempt to authenticate with the token
                     let url = `${window.PP_API_URL}/account/login`;
@@ -52,11 +52,13 @@ document.addEventListener('alpine:init', () => {
                         Alpine.store('user', data); // Save authenticated user to store
                         done(); // Proceed with routing
                     } else {
+                        alert("Token validation failed")
                         // Redirect to login page if token validation fails
                         console.warn('Token validation failed, redirecting to login.');
                         window.location = process.env.PP_URL;
                     }
                 } else if (user === undefined) {
+                    alert("no token and no user")
                     // Redirect to login if no user is authenticated
                     console.warn('No user authenticated, redirecting to login.');
                     window.location = process.env.PP_URL;
@@ -65,6 +67,7 @@ document.addEventListener('alpine:init', () => {
                     done(); // Proceed with routing if user is already authenticated
                 }
             } catch (error) {
+                alert("something went completely wrong");
                 console.error('Error in before hook:', error);
                 window.location = 'http://localhost:3000/#/login'; // Redirect to login on error
             }
