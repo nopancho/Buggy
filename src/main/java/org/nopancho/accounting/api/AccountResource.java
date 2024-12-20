@@ -274,9 +274,19 @@ public class AccountResource extends SecuredResource implements ServletContextLi
         user.restrictInformation();
         response.put(User.USER, user.serialize());
         String login_successful = getSuccessJson("login successful", response);
-
-        NewCookie sessionCookie = new NewCookie("token", jwt, "/", null, null, -1, false);
         String url = ConfigManager.getConfig().getString("app.url");
+        NewCookie sessionCookie = new NewCookie(
+                "token",        // Cookie name
+                jwt,            // Cookie value
+                "/",            // Path
+                url, // Domain (set explicitly)
+                null,           // Comment
+                NewCookie.DEFAULT_MAX_AGE, // Max age (use default or custom)
+                true,          // Secure flag (set true if using HTTPS)
+                true            // HttpOnly flag (for security)
+        );
+
+
         URI redirectUri = UriBuilder.fromUri(url).build();
         LOGGER.info("redirecting to "+url);
         return Response.seeOther(redirectUri).cookie(sessionCookie).build();
