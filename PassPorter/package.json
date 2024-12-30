@@ -1,0 +1,33 @@
+{
+  "name": "passporter",
+  "version": "1.0.0",
+  "description": "frontend for a app that supports login, sign up, forgot password, verify key",
+  "main": "index.js",
+  "author": "Sebastian Sprenger",
+  "license": "ISC",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development webpack serve --open",
+    "prod": "cross-env NODE_ENV=production webpack serve --open",
+    "stop": "npx kill-port 3000",
+    "build": "cross-env NODE_ENV=production npx webpack --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "tbd"
+  },
+  "dependencies": {
+    "alpinejs": "^3.14.3",
+    "navigo": "^8.11.1"
+  },
+  "devDependencies": {
+    "babel-loader": "^9.2.1",
+    "copy-webpack-plugin": "^12.0.2",
+    "cross-env": "^7.0.3",
+    "dotenv-webpack": "^8.1.0",
+    "kill-port": "^2.0.1",
+    "lite-server": "^2.6.1",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
+  }
+}

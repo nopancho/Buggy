@@ -1,0 +1,23 @@
+# the appname can be used for example in email templates
+appname = Buggy
+# define the landing page after successful login
+app.url = http://localhost:4000
+login.url = http://localhost:3000/#/login
+app.domain = localhost
+
+jwt.secret=<jwt_secret>
+
+mail.apikey =<mail-api-key>
+
+## the support email is part of every email that is sent
+mail.support = support@buggy.nopancho.com
+## the sender of registration mail
+mail.registration = registration@buggy.nopancho.com
+## the confirm registration mail contains a link to the code verification page
+mail.confirm_url = http://localhost:3000/#/confirm-signup?userId=<user_id>
+mail.reset_url = http://localhost:3000/#/reset-password?userId=<user_id>&forgotPasswordKey=<forgot_password_key>
+
+
+# setup mongo connection
+mongodb.uri = mongodb://127.0.0.1:27018
+dbname = buggy

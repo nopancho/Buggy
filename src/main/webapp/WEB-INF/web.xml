@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <display-name>webbase</display-name>
+    <servlet>
+        <servlet-name>
+            Jersey Web Application
+        </servlet-name>
+        <servlet-class>
+            org.glassfish.jersey.servlet.ServletContainer
+        </servlet-class>
+
+        <init-param>
+            <param-name>
+                jersey.config.server.provider.packages
+            </param-name>
+            <param-value>
+                org.nopancho.accounting.api
+                org.nopancho.tasks.api
+            </param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>com.sun.jersey.config.feature.DisableWADL</param-name>
+            <param-value>true</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+            <param-value>com.sun.jersey.api.container.filter.PostReplaceFilter
+                </param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>api.version</param-name>
+            <param-value>0.1</param-value>
+        </init-param>
+
+        <load-on-startup>
+            1
+        </load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>
+            Jersey Web Application
+        </servlet-name>
+        <url-pattern>
+            /*
+        </url-pattern>
+    </servlet-mapping>
+    <filter>
+        <filter-name>ApiOriginFilter</filter-name>
+        <filter-class>org.nopancho.api.ApiOriginFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>CharsetResponseFilter</filter-name>
+        <filter-class>org.nopancho.api.CharsetResponseFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ApiOriginFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CharsetResponseFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <listener>
+        <listener-class>org.nopancho.accounting.api.AccountResource</listener-class>
+    </listener>
+</web-app>

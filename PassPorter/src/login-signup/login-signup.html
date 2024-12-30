@@ -1,0 +1,53 @@
+<div class="columns is-centered">
+    <div class="column is-6-tablet is-4-desktop">
+        <div class="box" x-data="loginSignup">
+            <h2 class="title is-4 has-text-centered" x-text="state === 'login' ? 'Login' : state === 'signup' ? 'Sign Up' : 'Forgot Password'"></h2>
+
+            <!-- Error Message -->
+            <div class="notification is-danger is-light" x-show="error" x-text="error"></div>
+
+            <!-- Email Field -->
+            <div class="field">
+                <label class="label">Email</label>
+                <div class="control">
+                    <input class="input" type="email" placeholder="Email" x-model="email" required>
+                </div>
+            </div>
+
+            <!-- Password Field (hidden for Forgot Password) -->
+            <template x-if="state !== 'forgotPassword'">
+                <div class="field">
+                    <label class="label">Password</label>
+                    <div class="control">
+                        <input class="input" type="password" placeholder="Password" x-model="password" required>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Submit Button -->
+            <div class="field">
+                <button class="button is-primary is-fullwidth"
+                        @click.prevent="submit()"
+                        @keydown.window.enter="submit()"
+                        x-text="state === 'login' ? 'Login' : state === 'signup' ? 'Sign Up' : 'Reset Password'">
+                </button>
+            </div>
+
+            <!-- Links for Switching States -->
+            <div class="has-text-centered">
+                <div>
+                    <a href="javascript:void(0)" @click="setState('signup')" x-show="state === 'login'">Don't have an account? Sign up</a>
+                </div>
+                <div>
+                    <a href="javascript:void(0)" @click="setState('login')" x-show="state === 'signup'">Already have an account? Login</a>
+                </div>
+                <div>
+                    <a href="javascript:void(0)" @click="setState('forgotPassword')" x-show="state === 'login'">Forgot your password?</a>
+                </div>
+                <div>
+                    <a href="javascript:void(0)" @click="setState('login')" x-show="state === 'forgotPassword'">Back to Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

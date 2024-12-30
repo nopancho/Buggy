@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+    <logback.ContextSelector>JNDI</logback.ContextSelector>
+
+    <property file="core.properties" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <discriminator class="ch.qos.logback.classic.sift.JNDIBasedContextDiscriminator">
+            <defaultValue>unknown1</defaultValue>
+        </discriminator>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <includeCallerData>true</includeCallerData>
+            <providers>
+                <timestamp/>
+                <threadName/>
+                <mdc/>
+                <loggerName/>
+                <message/>
+                <logLevel/>
+                <arguments/>
+                <stackTrace/>
+                <stackHash/>
+                <tags/>
+                <contextName/>
+            </providers>
+        </encoder>
+    </appender>
+
+    <appender name="STDOUT_PATTERN" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36}: %msg%n</pattern>
+        </encoder>
+    </appender>
+    ​
+    <if condition='p("global-logging").equals("true")'>
+        <then>
+            <root level="ALL">
+                <appender-ref ref="STDOUT"/>
+            </root>
+        </then>
+        <else>
+            <root level="DEBUG">
+                <appender-ref ref="STDOUT_PATTERN"/>
+            </root>
+        </else>
+    </if>
+
+
+    <logger name="org.mongodb.driver" level="ERROR" />
+    <logger name="org.apache.cxf.common.logging" level="ERROR" />
+    <logger name="org.apache.commons.beanutils" level="ERROR" />
+    <logger name="org.apache.http" level="ERROR" />
+    <logger name="httpclient" level="WARN" />
+
+
+</configuration>

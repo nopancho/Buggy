@@ -1,0 +1,35 @@
+<div class="columns is-centered">
+    <div class="column is-6-tablet is-4-desktop">
+        <div class="box" x-data="confirmSignup">
+            <h1 class="title is-4 has-text-centered" >Verify Confirmation Key</h1>
+
+            <!-- Success Message -->
+            <div class="notification is-success is-light" x-show="status === 'confirmed'">
+                Registration confirmed successfully! You can now <a href="/login" data-navigo>log in</a>.
+            </div>
+
+            <!-- Error Message -->
+            <div class="notification is-danger is-light" x-show="status === 'error'" x-text="error"></div>
+
+            <!-- Confirmation Key Input -->
+            <div x-show="status !== 'confirmed'">
+                <div class="field">
+                    <label class="label">Confirmation Key</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Enter your confirmation key" x-model="confirmationKey" required>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="field" >
+                    <button class="button is-primary is-fullwidth" @click.prevent="confirmRegistration()">Confirm</button>
+                </div>
+            </div>
+
+            <!-- Back to Login -->
+            <div class="has-text-centered" x-show="status === 'confirmed'">
+                <a href="/login" data-navigo>Go to Login</a>
+            </div>
+        </div>
+    </div>
+</div>

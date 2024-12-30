@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Interactive Timeline UI</title>
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+    <script defer src="bundle.js"></script>
+</head>
+</head>
+<body>
+<nav x-data="menu" class="navbar is-dark" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="https://bulma.io">
+            <img src="images/noun-bug-51169.svg" alt="Brand Logo">
+        </a>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+
+    <div class="navbar-menu">
+        <div class="navbar-end">
+            <div class="navbar-item">
+                <div x-data="{
+                            userDropDownActive: false,
+                            close(){
+                                this.userDropDownActive = false;
+                                },
+                                toggle(){
+                                    this.userDropDownActive = !this.userDropDownActive;
+                                }
+                            }"
+                     @click.outside="close()"
+                     class="dropdown is-right"
+                     :class="{ 'is-active': userDropDownActive }"
+                     @click="userDropDownActive = !userDropDownActive"
+                     @keydown.escape.prevent.stop="close()"
+                     @focusin.window="!$refs.panel.contains($event.target) && close()"
+                >
+                    <div class="dropdown-trigger">
+                        <button class="button is-dark" aria-haspopup="true" aria-controls="dropdown-menu">
+                            <span class="icon" x-html="window.Icons.user">
+                            </span>
+                        </button>
+                    </div>
+
+                    <div x-ref="panel" class="dropdown-menu" id="dropdown-menu" role="menu">
+                        <div class="dropdown-content">
+                            <a href="#" class="dropdown-item"> Dropdown item </a>
+                            <a href="#" class="dropdown-item"> Other dropdown item </a>
+                            <a href="#" class="dropdown-item"> Active dropdown item </a>
+                            <a href="#" class="dropdown-item"> Other dropdown item </a>
+                            <hr class="dropdown-divider"/>
+                            <a @click.prevent="logout" href="#" class="dropdown-item"
+                               style="display: flex; align-items: center; padding: 0.5rem 1rem; gap: 0.5rem; text-decoration: none; color: #4a4a4a; border-bottom: 1px solid #ddd;">
+                                <span class="icon" style="display: flex; align-items: center; justify-content: center; width: 1rem; height: 1rem;">
+                                    <img src="images/noun-logout-7204797.svg" alt="Icon" style="width: 1rem; height: 1rem;">
+                                </span>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="section">
+        <div id="content">
+            Let's start rocking finally wohoooo
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Get all "navbar-burger" elements
+        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+        // Add a click event on each of them
+        $navbarBurgers.forEach(el => {
+            el.addEventListener('click', () => {
+
+                // Get the target from the "data-target" attribute
+                const target = el.dataset.target;
+                const $target = document.getElementById(target);
+
+                // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                el.classList.toggle('is-active');
+                $target.classList.toggle('is-active');
+
+            });
+        });
+    });
+    function menu() {
+        return {
+            userDropDownActive: false,
+            logout() {
+                document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                window.location = window.PP_URL;
+            }
+        }
+    }
+</script>
+</body>
+</html>
