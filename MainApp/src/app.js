@@ -38,7 +38,7 @@ document.addEventListener('alpine:init', () => {
                         ?.split('=')[1];
 
                     // Attempt to authenticate with the token
-                    let url = `${window.PP_API_URL}/account/login`;
+                    let url = `${window.PP_API_URL}account/login`;
                     console.log('Token:', token);
                     console.log('URL:', url);
                     const response = await fetchWithAuth(url, {
@@ -59,6 +59,7 @@ document.addEventListener('alpine:init', () => {
                     }
                 } else if (user === undefined) {
                     // Redirect to login if no user is authenticated
+                    alert("No user authenticated, redirecting to login.");
                     console.warn('No user authenticated, redirecting to login.');
                     window.location = process.env.PP_URL;
                 } else {
@@ -67,6 +68,7 @@ document.addEventListener('alpine:init', () => {
                 }
             } catch (error) {
                 console.error('Error in before hook:', error);
+                alert("Error in before hook, redirecting to login.");
                 window.location = 'http://localhost:3000/#/login'; // Redirect to login on error
             }
         },

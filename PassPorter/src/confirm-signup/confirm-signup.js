@@ -9,7 +9,7 @@ export default {
         let userId = Alpine.store('routeData').params.userId;
 
         try {
-            const response = await fetch(`${process.env.API_URL}/account/confirm`, {
+            const response = await fetch(`${process.env.API_URL}account/confirm`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
