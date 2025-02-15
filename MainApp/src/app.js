@@ -67,7 +67,7 @@ document.addEventListener('alpine:init', () => {
                 }
             } catch (error) {
                 console.error('Error in before hook:', error);
-                window.location = 'http://localhost:3000/#/login'; // Redirect to login on error
+                window.location = process.env.PP_URL; // Redirect to login on error
             }
         },
     });
