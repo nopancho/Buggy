@@ -2,6 +2,8 @@ const path = require('path');
 const Dotenv = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
+console.log("🚀 Webpack is running in:", process.env.NODE_ENV);
+
 module.exports = {
     entry: './src/app.js', // Entry point
     output: {
