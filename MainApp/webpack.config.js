@@ -1,6 +1,7 @@
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 module.exports = {
     entry: './src/app.js', // Entry point
     output: {
@@ -8,10 +9,14 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'), // Output directory
     },
     resolve: {
+        alias: {
+            jsModules: path.resolve(__dirname, '../jsModules/src'), // Ensure Webpack finds external modules
+        },
         modules: [
             path.resolve(__dirname, 'node_modules'), // Ensure Webpack can find node_modules
             'node_modules',
         ],
+        extensions: ['.js'], // Allow importing JS files without specifying `.js`
     },
     module: {
         rules: [
@@ -41,11 +46,6 @@ module.exports = {
                     context: path.resolve(__dirname, 'src'), // Base directory for matching
                     to: path.resolve(__dirname, 'dist'), // Output to `dist` while preserving structure
                 },
-                // {
-                //     from: '**/*.svg', // Match all HTML files
-                //     context: path.resolve(__dirname, 'src'), // Base directory for matching
-                //     to: path.resolve(__dirname, 'dist'), // Output to `dist` while preserving structure
-                // }
             ],
         }),
     ],
